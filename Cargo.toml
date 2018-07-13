@@ -4,7 +4,7 @@ version = "0.1.0"
 authors = ["Anton Shramko <antonshramko@yandex.ru>"]
 
 [dependencies]
-webrender = { rev = "b88c0ba7f511e452f2a26e0c0b3ae93a18fd8b1a", git = "https://github.com/servo/webrender" }
+webrender = { rev = "c540acf0990f8a0cbf9429e7085c7cc3b6901add", git = "https://github.com/servo/webrender" }
 failure_derive = "0.1"
 lazy_static = "1.0"
 image = "0.19.0"
