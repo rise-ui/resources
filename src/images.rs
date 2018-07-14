@@ -150,7 +150,9 @@ impl ImageLoader {
   }
 
   fn render_api(&self) -> &RenderApi {
-    self.render.as_ref().unwrap()
+    let api = self.render.as_ref();
+    println!("Get Render API: {}", api.is_some());
+    api.unwrap()
   }
 }
 

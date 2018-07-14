@@ -7,26 +7,25 @@ extern crate failure;
 extern crate image;
 extern crate webrender;
 
-mod images;
+pub mod images;
 
-use std::collections::HashMap;
-use std::default::Default;
 use std::sync::{Mutex, MutexGuard};
+use std::default::Default;
 
-use self::images::ImageLoader;
 use webrender::api::RenderApiSender;
+use self::images::ImageLoader;
 
 lazy_static! {
-  static ref RES: Mutex<Resources> = Mutex::new(Resources::new());
+  static ref RESOURCES: Mutex<Resources> = Mutex::new(Resources::new());
 }
 
 pub fn init_resources(render_api: RenderApiSender) {
-  RES.try_lock().unwrap().set_render_api(render_api);
+  RESOURCES.try_lock().unwrap().set_render_api(render_api);
 }
 
 // Allow global access to Resources
 pub fn resources() -> MutexGuard<'static, Resources> {
-  RES.try_lock().unwrap()
+  RESOURCES.try_lock().unwrap()
 }
 
 pub struct Resources {
