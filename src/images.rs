@@ -2,7 +2,8 @@ use std::collections::HashMap;
 use std::path::PathBuf;
 use failure::Error;
 
-use image::{self, DynamicImage, GenericImage, ImageError};
+use image::{self, DynamicImage, GenericImageView, ImageError};
+
 use webrender::api::{
   ExternalImageData,
   ExternalImageId,
@@ -10,6 +11,7 @@ use webrender::api::{
   ResourceUpdate,
   ImageFormat,
   UpdateImage,
+  DirtyRect,
   ImageData,
   RenderApi,
   AddImage,
@@ -118,10 +120,10 @@ impl ImageLoader {
 
   pub fn update_texture(&mut self, key: ImageKey, descriptor: ImageDescriptor, data: ExternalImageData) {
     let resource = ResourceUpdate::UpdateImage(UpdateImage {
-      key,
-      descriptor,
       data: ImageData::External(data),
-      dirty_rect: None,
+      dirty_rect: DirtyRect::All,
+      descriptor,
+      key,
     });
 
     self.render_api().update_resources(vec![resource]);
@@ -176,7 +178,7 @@ fn prepare_image(image: DynamicImage) -> Result<(ImageData, ImageDescriptor), Er
   }
 
   let opaque = is_image_opaque(format, &bytes[..]);
-  let descriptor = ImageDescriptor::new(image_dims.0, image_dims.1, format, opaque, false);
+  let descriptor = ImageDescriptor::new(image_dims.0 as i32, image_dims.1 as i32, format, opaque, false);
   let data = ImageData::new(bytes);
 
   Ok((data, descriptor))
